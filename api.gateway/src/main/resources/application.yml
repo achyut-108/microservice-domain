@@ -14,11 +14,14 @@ eureka:
     #preferIpAddress: true
 zuul:
   host:
-    connect-timeout-millis: 1000
-    socket-timeout-millis:  1000
+    connect-timeout-millis: 500000
+    socket-timeout-millis:  500000
   ignoredServices: '*'
   routes:
     get-set-go-composite:
-      path: /gsg-composite/*
-      serviceId: get-set-go-composite
-      stripPrefix: false 
+      path: /gsg/gsg-composite/**
+      serviceId: GET-SET-GO-COMPOSITE
+      stripPrefix: false
+ribbon:
+  ReadTimeout: 60000
+  ConnectTimeout: 60000
