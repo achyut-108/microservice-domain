@@ -1,18 +1,19 @@
 package com.ihs.gsg.starter;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
-import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.autoconfigure.domain.EntityScan;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EnableEurekaClient
 @ComponentScan("com.ihs.gsg")
-@EnableAutoConfiguration
+@EnableJpaRepositories(basePackages = {"com.ihs.gsg.repo"})
+@EnableTransactionManagement
+@EntityScan(basePackages = {"com.ihs.gsg"})
 public class GetSetGoCoreApplication {
 
 	
