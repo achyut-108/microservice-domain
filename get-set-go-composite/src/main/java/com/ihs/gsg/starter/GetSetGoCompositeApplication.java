@@ -8,7 +8,7 @@ import org.springframework.context.annotation.ComponentScan;
 
 @SpringBootApplication
 @EnableEurekaClient
-@EnableFeignClients
+@EnableFeignClients(basePackages = {"com.ihs.gsg"})
 @ComponentScan("com.ihs.gsg.*")
 public class GetSetGoCompositeApplication {
 
