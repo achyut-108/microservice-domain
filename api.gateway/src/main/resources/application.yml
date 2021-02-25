@@ -4,10 +4,21 @@ spring:
   application:
     name: ihs-api-gateway
 eureka:
-  instance:
-    preferIpAddress: true
   client:
     registerWithEureka: true
     fetchRegistry: true
     serviceUrl:
       defaultZone: ${EUREKA_URI:http://localhost:8761/eureka}
+  instance:
+    hostname: localhost
+    #preferIpAddress: true
+zuul:
+  host:
+    connect-timeout-millis: 1000
+    socket-timeout-millis:  1000
+  ignoredServices: '*'
+  routes:
+    get-set-go-composite:
+      path: /gsg-composite/*
+      serviceId: get-set-go-composite
+      stripPrefix: false 
