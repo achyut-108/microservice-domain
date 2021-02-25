@@ -1,6 +1,7 @@
 package com.ihs.gsg.service.impl;
 
 import java.io.IOException;
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,13 +33,13 @@ public class FileStorageService {
         return fileDBRepository.save(assignmentEntity);
     }
 
-    public AssignmentEntity getFile(String id,String user) {
-        return fileDBRepository.findbyIdAndUser(id,user);
+    public AssignmentEntity getFile(BigInteger id,Long user) {
+        return fileDBRepository.findByIdAndTraineeId(id,user);
     }
 
-    public List<AssignmentEntity> getAllFiles(String user) {
+    public List<AssignmentEntity> getAllFiles(Long user) {
         List<AssignmentEntity> allfiles=new ArrayList<>();
-         fileDBRepository.findAllByUserId(user).forEach(allfiles::add);
+         fileDBRepository.findAllByTraineeId(user).forEach(allfiles::add);
         return allfiles;
     }
 }

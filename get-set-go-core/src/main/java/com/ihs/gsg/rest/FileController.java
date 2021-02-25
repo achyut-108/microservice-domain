@@ -1,5 +1,6 @@
 package com.ihs.gsg.rest;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -46,7 +47,7 @@ public class FileController {
     }
 
     @GetMapping("/files/{user}")
-    public ResponseEntity<List<ResponseFile>> getListFiles(@PathVariable String user) {
+    public ResponseEntity<List<ResponseFile>> getListFiles(@PathVariable Long user) {
         List<ResponseFile> files = storageService.getAllFiles(user).stream().map(dbFile -> {
             String fileDownloadUri = ServletUriComponentsBuilder
                     .fromCurrentContextPath()
@@ -65,7 +66,7 @@ public class FileController {
     }
 
     @GetMapping("/files/{id}/{user}")
-    public ResponseEntity<byte[]> getFile(@PathVariable String id,@PathVariable String user ) {
+    public ResponseEntity<byte[]> getFile(@PathVariable BigInteger id,@PathVariable Long user ) {
         AssignmentEntity fileDB = storageService.getFile(id,user);
 
         return ResponseEntity.ok()

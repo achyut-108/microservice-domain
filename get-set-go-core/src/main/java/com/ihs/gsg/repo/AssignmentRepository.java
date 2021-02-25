@@ -15,7 +15,7 @@ import com.ihs.gsg.entity.AssignmentEntity;
 @Repository
 public interface AssignmentRepository extends CrudRepository<AssignmentEntity, BigInteger> {
 
-     AssignmentEntity findbyIdAndUser(String id,String user);
-     List<AssignmentEntity> findAllByUserId(String user);
+     AssignmentEntity findByIdAndTraineeId(BigInteger id,Long user);
+     List<AssignmentEntity> findAllByTraineeId(Long user);
 
 }
