@@ -15,7 +15,7 @@ import com.ihs.gsg.domain.core.EnironmentSetupLinks;
  * @since Feb 24, 2021 4:58 PM
  */
 @RestController
-@RequestMapping("/gsg/env")
+@RequestMapping("/gsg/gsg-composite/env")
 public class EnvDetailController {
 
 //	@Autowired
