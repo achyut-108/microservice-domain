@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import com.ihs.gsg.domain.assignment.ResponseFile;
+import com.ihs.gsg.domain.assignment.AssignmentDownloadResponse;
+import com.ihs.gsg.domain.assignment.AssignmentUploadResponse;
+import com.ihs.gsg.domain.assignment.AssignmentDetails;
 import com.ihs.gsg.entity.AssignmentEntity;
 import com.ihs.gsg.service.impl.FileStorageService;
 
@@ -27,50 +29,53 @@ import com.ihs.gsg.service.impl.FileStorageService;
  */
 @RestController
 @RequestMapping(("gsg/file"))
-public class FileController {
+public class AssignmentController {
 
-    @Autowired
-    private FileStorageService storageService;
+	@Autowired
+	private FileStorageService storageService;
 
-    @PostMapping("/upload/{user}")
-    public ResponseEntity<String> uploadFile(@RequestParam("file") MultipartFile file,@PathVariable String user) {
-        String message = "";
-        try {
-            storageService.store(file,user);
+	@PostMapping("/upload/{userId}/{assignmentType}")
+	public AssignmentUploadResponse uploadFile(@RequestParam("file") MultipartFile file, @PathVariable Long userId, @PathVariable String assignmentType) {
+		String message = "";
+		AssignmentUploadResponse assignmentUploadResponse = new AssignmentUploadResponse();
+		try {
+			storageService.store(file, userId);
 
-            message = "Uploaded the file successfully: " + file.getOriginalFilename();
-            return ResponseEntity.status(HttpStatus.OK).body(message);
-        } catch (Exception e) {
-            message = "Could not upload the file: " + file.getOriginalFilename() + "!";
-            return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
-        }
-    }
+			message = "Uploaded the file successfully: " + file.getOriginalFilename();
+			assignmentUploadResponse.setMessage(message);
+			return assignmentUploadResponse;
+			// return ResponseEntity.status(HttpStatus.OK).body(message);
+		} catch (Exception e) {
+			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
+			assignmentUploadResponse.setMessage(message);
+			return assignmentUploadResponse;
+			// return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
+		}
+	}
 
-    @GetMapping("/files/{user}")
-    public ResponseEntity<List<ResponseFile>> getListFiles(@PathVariable Long user) {
-        List<ResponseFile> files = storageService.getAllFiles(user).stream().map(dbFile -> {
-            String fileDownloadUri = ServletUriComponentsBuilder
-                    .fromCurrentContextPath()
-                    .path("/files/")
-                    .path(String.valueOf(dbFile.getId()))
-                    .toUriString();
+	@GetMapping("/files/get/{userId}")
+	public AssignmentDownloadResponse getListFiles(@PathVariable Long userId) {
+		
+		AssignmentDownloadResponse assignmentDownloadResponse = new AssignmentDownloadResponse();
+		
+		List<AssignmentDetails> files = storageService.getAllFiles(userId).stream().map(dbFile -> {
+			String fileDownloadUri = ServletUriComponentsBuilder.fromCurrentContextPath().path("/files/")
+					.path(String.valueOf(dbFile.getId())).toUriString();
 
-            return new ResponseFile(
-                    dbFile.getAssignmentName(),
-                    fileDownloadUri,
-                    dbFile.getFileType(),
-                    dbFile.getData().length);
-        }).collect(Collectors.toList());
+			return new AssignmentDetails(dbFile.getAssignmentName(), fileDownloadUri, dbFile.getFileType(),
+					dbFile.getData().length);
+		}).collect(Collectors.toList());
 
-        return ResponseEntity.status(HttpStatus.OK).body(files);
-    }
+		assignmentDownloadResponse.setAssignmentDetails(files);
+		return assignmentDownloadResponse;
+	}
 
-    @GetMapping("/files/{id}/{user}")
-    public ResponseEntity<byte[]> getFile(@PathVariable BigInteger id,@PathVariable Long user ) {
-        AssignmentEntity fileDB = storageService.getFile(id,user);
+	@GetMapping("/files/get/{assignmentId}/{userId}")
+	public ResponseEntity<byte[]> getFile(@PathVariable BigInteger assignmentId, @PathVariable Long userId) {
+		AssignmentEntity fileDB = storageService.getFile(assignmentId, userId);
 
-        return ResponseEntity.ok()
-                .header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getAssignmentName() + "\"")
-                .body(fileDB.getData());
-    }
+		return ResponseEntity.ok()
+				.header(HttpHeaders.CONTENT_DISPOSITION, "attachment; filename=\"" + fileDB.getAssignmentName() + "\"")
+				.body(fileDB.getData());
+	}
 }

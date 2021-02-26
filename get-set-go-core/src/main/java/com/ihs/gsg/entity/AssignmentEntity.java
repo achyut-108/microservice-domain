@@ -27,20 +27,20 @@ public class AssignmentEntity {
     
 	@Id
 	@Column(name="id")
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
     private BigInteger id;
-	@Column(name="assignmentName")
+	@Column(name="assignment_name")
     private String assignmentName;
-	@Column(name="assignmentType")
+	@Column(name="assignment_type")
     private String assignmentType;
-	@Column(name="fileType")
+	@Column(name="file_type")
     private String fileType;
-	@Column(name="trainerId")
+	@Column(name="trainer_id")
     private Long trainerId;
-	@Column(name="traineeId")
+	@Column(name="trainee_id")
     private Long traineeId;
-
     @Lob
+    @Column(name="data")
     private byte[] data;
     
 }

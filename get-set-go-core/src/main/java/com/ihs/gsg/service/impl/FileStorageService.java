@@ -13,7 +13,6 @@ import org.springframework.web.multipart.MultipartFile;
 import com.ihs.gsg.entity.AssignmentEntity;
 import com.ihs.gsg.repo.AssignmentRepository;
 
-
 /**
  * @author saurabh.shyam
  * @since Feb 25, 2021 5:49 PM
@@ -21,25 +20,27 @@ import com.ihs.gsg.repo.AssignmentRepository;
 @Service
 public class FileStorageService {
 
-    @Autowired
-    private AssignmentRepository fileDBRepository;
+	@Autowired
+	private AssignmentRepository fileDBRepository;
 
-    public AssignmentEntity store(MultipartFile file,String user) throws IOException {
-        String fileName = StringUtils.cleanPath(file.getOriginalFilename());
-        AssignmentEntity assignmentEntity = new AssignmentEntity();
-       // (fileName, file.getContentType(), file.getBytes(),Long.parseLong(user))
-      //  assignmentEntity.
+	public AssignmentEntity store(MultipartFile file, Long user) throws IOException {
+		String fileName = StringUtils.cleanPath(file.getOriginalFilename());
+		AssignmentEntity assignmentEntity = new AssignmentEntity();
+		assignmentEntity.setAssignmentName(fileName);
+		assignmentEntity.setFileType(file.getContentType());
+		assignmentEntity.setData(file.getBytes());
+		assignmentEntity.setTrainerId(user);
+		assignmentEntity.setAssignmentType("ASSIGNMENT");
+		return fileDBRepository.save(assignmentEntity);
+	}
 
-        return fileDBRepository.save(assignmentEntity);
-    }
+	public AssignmentEntity getFile(BigInteger id, Long user) {
+		return fileDBRepository.findByIdAndTrainerId(id, user);
+	}
 
-    public AssignmentEntity getFile(BigInteger id,Long user) {
-        return fileDBRepository.findByIdAndTraineeId(id,user);
-    }
-
-    public List<AssignmentEntity> getAllFiles(Long user) {
-        List<AssignmentEntity> allfiles=new ArrayList<>();
-         fileDBRepository.findAllByTraineeId(user).forEach(allfiles::add);
-        return allfiles;
-    }
+	public List<AssignmentEntity> getAllFiles(Long user) {
+		List<AssignmentEntity> allfiles = new ArrayList<>();
+		fileDBRepository.findAllByTrainerId(user).forEach(allfiles::add);
+		return allfiles;
+	}
 }

@@ -1,51 +1,23 @@
 package com.ihs.gsg.domain.assignment;
 
+import java.io.Serializable;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
 /**
  * @author saurabh.shyam
  * @since Feb 25, 2021 6:12 PM
  */
-public class ResponseFile {
-    private String name;
-    private String url;
-    private String type;
-    private long size;
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class AssignmentDetails implements Serializable {
 
-    public ResponseFile(String name, String url, String type, long size) {
-        this.name = name;
-        this.url = url;
-        this.type = type;
-        this.size = size;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
-    }
-
-    public long getSize() {
-        return size;
-    }
-
-    public void setSize(long size) {
-        this.size = size;
-    }
+	public static final long serialVersionUID = 1L;
+	private String name;
+	private String url;
+	private String type;
+	private long size;
 }
