@@ -1,21 +1,26 @@
 package com.ihs.gsg.domain.signup;
 
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.util.Date;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.ihs.gsg.common.CommonServiceRequest;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.ToString;
+import lombok.EqualsAndHashCode;
+import lombok.NoArgsConstructor;
 
 @Data
-@ToString
 @JsonAutoDetect
+@EqualsAndHashCode(callSuper=false)
+@AllArgsConstructor
+@NoArgsConstructor
 public class NewJoineeSignUpRequest extends CommonServiceRequest implements Serializable{
 	public static final long serialVersionUID = 1L;
 	
-	private Long joineeId;
+	private BigInteger joineeId;
 	private String name;
 	private String role;
 	private Long departmentId;//--dpartmentMAster
