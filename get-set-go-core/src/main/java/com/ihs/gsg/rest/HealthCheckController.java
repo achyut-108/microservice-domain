@@ -11,4 +11,9 @@ public class HealthCheckController {
 		return true;
 	}
 	
+	
+	@GetMapping("health-check/brum-config/get")
+	public boolean brumConfig() {
+		return true;
+	}
 }

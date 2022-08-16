@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.ihs.gsg.common.util.ServiceUtil;
 import com.ihs.gsg.core.feign.AssignmentFeignClient;
 import com.ihs.gsg.domain.core.AssignmentDownloadResponse;
 import com.ihs.gsg.domain.core.AssignmentUploadResponse;
@@ -43,11 +44,13 @@ public class AssignmentController {
 
 			message = "Uploaded the file successfully: " + file.getOriginalFilename();
 			assignmentUploadResponse.setMessage(message);
+			ServiceUtil.setSuccess(assignmentUploadResponse);
 			return assignmentUploadResponse;
 			// return ResponseEntity.status(HttpStatus.OK).body(message);
 		} catch (Exception e) {
 			message = "Could not upload the file: " + file.getOriginalFilename() + "!";
 			assignmentUploadResponse.setMessage(message);
+			ServiceUtil.setFailure(assignmentUploadResponse);
 			return assignmentUploadResponse;
 			// return ResponseEntity.status(HttpStatus.EXPECTATION_FAILED).body(message);
 		}
@@ -67,7 +70,7 @@ public class AssignmentController {
 
 	@PostMapping("/scheduleTest/{testType}/{mailId}/{date}")
 	public boolean scheduleTest(@PathVariable String testType, @PathVariable String mailId, String date) {
-		String content = "Hi Team,\n" + "\n" + "Please schedule the test for" + testType + "certification on" + date
+		String content = "Hi Team,\n" + "\n" + "Please schedule the test for " + testType + " certification on " + date
 				+ " \n" + "\n" + "Regards\n" + mailId.substring(mailId.indexOf('@')) + "\n";
 		try {
 			mailService.sendMail(mailId, "Schedule Test", content);
